@@ -5,7 +5,7 @@ import Heading from '@/components/atoms/typography/heading/Heading';
 import Button from '@/components/atoms/button/Button';
 import style from '@/app/page.module.scss';
 
-const Error = ({ error, reset }: { error: Error; reset: () => void }) => {
+const Error = () => {
 	return (
 		<Container classes={`${style.bgImage} flex items-center align-center min-h-screen`}>
 			<div className={'text-center'}>
