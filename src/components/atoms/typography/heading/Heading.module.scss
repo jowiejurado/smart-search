@@ -1,0 +1,53 @@
+.heading {
+	margin-bottom: 16px;
+}
+
+.xlarge {
+	font-size: 72px;
+	font-weight: 400;
+	line-height: normal;
+
+	&.extrabold {
+		font-weight: 900;
+	}
+}
+
+.large {
+	font-size: 36px;
+	font-weight: 400;
+	line-height: normal;
+
+	&.extrabold {
+		font-weight: 900;
+	}
+}
+
+.medium {
+	font-size: 20px;
+	font-weight: 400;
+	line-height: normal;
+
+	&.extrabold {
+		font-weight: 900;
+	}
+}
+
+.small {
+	font-size: 18px;
+	font-weight: 400;
+	line-height: normal;
+
+	&.extrabold {
+		font-weight: 900;
+	}
+}
+
+.xsmall {
+	font-size: 16px;
+	font-weight: 400;
+	line-height: normal;
+
+	&.extrabold {
+		font-weight: 900;
+	}
+}

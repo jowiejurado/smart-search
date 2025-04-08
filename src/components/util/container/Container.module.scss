@@ -1,0 +1,13 @@
+.container {
+  max-width: var(--container-width-large);
+  margin: 0 auto;
+  padding: 0 24px;
+
+  &.small {
+    max-width: var(--container-width-small);
+  }
+
+  &.medium {
+    max-width: var(--container-width-medium);
+  }
+}

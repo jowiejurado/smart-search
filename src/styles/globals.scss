@@ -1,0 +1,81 @@
+@use "tailwindcss";
+@use 'typography';
+
+:root {
+	--container-width: 1400px;
+  --container-width-small: 600px;
+  --container-width-medium: 760px;
+
+	// Site colors
+	--white: #ffffff;
+	--black: #101115;
+
+	--font-primary: 'lato';
+	--font-heading: 'lato';
+}
+
+* {
+	box-sizing: border-box;
+	letter-spacing: 0.64px;
+	font-family: var(--font-primary), 'Arial', 'Serif';
+}
+
+html {
+	line-height: normal;
+	font-size: 16px;
+	font-family: var(--font-primary), 'Arial', 'Serif';
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: var(--font-primary), 'Arial', 'Serif';
+	margin: 0;
+}
+
+a {
+	text-decoration: none;
+	cursor: pointer;
+}
+
+ul,
+ol,
+dl {
+	margin: 0;
+	padding: 0;
+}
+
+button {
+	cursor: pointer;
+}
+
+button,
+input,
+textarea {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	border: 0;
+	padding: 0;
+}
+
+input,
+textarea,
+select {
+	border: 1px solid #cfcfcf;
+}
+
+button {
+	padding: 8px 16px;
+}
+
+p,
+span,
+input,
+button,
+label {
+  font-family: var(--font-primary), 'Arial', 'Serif';
+}
