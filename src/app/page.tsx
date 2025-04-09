@@ -8,7 +8,7 @@ const Home = () => {
 	return (
 		<>
 			<ThemeProvider>
-				<main className="min-h-screen flex justify-center items-center bg-white dark:bg-gray-900 dark:text-white">
+				<main className="min-h-screen flex justify-center items-center bg-white dark:bg-gray-900 dark:text-white relative">
 					<div className="absolute top-6 right-6">
 						<ButtonToggle />
 					</div>
@@ -19,4 +19,4 @@ const Home = () => {
 	);
 }
 
-export default Home
+export default Home;

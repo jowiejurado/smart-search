@@ -10,6 +10,8 @@
     "import:typesense": "npx tsx ./scripts/typesense.ts"
   },
   "dependencies": {
+    "@algolia/autocomplete-core": "^1.18.1",
+    "@algolia/autocomplete-js": "^1.18.1",
     "@heroicons/react": "^2.2.0",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.7",
