@@ -1,10 +1,8 @@
 'use client';
-import { InstantSearch } from 'react-instantsearch';
-import { typesenseInstantsearchAdapter } from '@/util/typesense';
+
 import { ThemeProvider } from '@/context/ThemeContext';
 import SearchWithFilter from '@/components/molecules/search-input/SearchWithFilter';
 import ButtonToggle from '@/components/atoms/button-toggle/ButtonToggle';
-import { Autocomplete } from '@/components/atoms/autocomplete/AutoComplete';
 
 const Home = () => {
 	return (
