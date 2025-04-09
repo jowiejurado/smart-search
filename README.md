@@ -2,6 +2,10 @@
  Smart Search App
 </h1>
 
+## Live Demo
+
+<a href="https://smart-search-app.netlify.app/" target="_blank">Smart Search App</a>
+
 ## Tech Stack
 
 - Typesense
