@@ -10,7 +10,7 @@ const SearchWithFilter = () => {
 	const [autocompleteState, setAutocompleteState] = useState<any>({ collections: [] });
 	const inputRef = useRef<HTMLInputElement>(null);
 	const [query, setQuery] = useState('');
-  const [debouncedQuery, setDebouncedQuery] = useState('');
+	const [debouncedQuery, setDebouncedQuery] = useState('');
 
 	const autocomplete = createAutocomplete({
 		placeholder: 'Type keywords...',
@@ -33,24 +33,81 @@ const SearchWithFilter = () => {
 
 			return [
 				{
-					sourceId: 'articles',
+					sourceId: 'multi-search',
 					async getItems() {
-						const result = await typesenseClient
-							.collections('articles')
-							.documents()
-							.search({
-								q: query,
-								query_by: 'title,content,tags',
-								highlight_full_fields: 'title,content,tags',
-								highlight_start_tag: '<b>',
-								highlight_end_tag: '</b>',
-								per_page: 5,
-							});
+						const multiSearchResults = await typesenseClient.multiSearch.perform({
+							searches: [
+								{
+									collection: 'articles',
+									q: query,
+									query_by: 'title,tags,author_name',
+									highlight_full_fields: 'title,tags,author_name',
+									per_page: 5,
+								},
+								{
+									collection: 'locations',
+									q: query,
+									query_by: 'address',
+									highlight_full_fields: 'address',
+									per_page: 5,
+								},
+								{
+									collection: 'comments',
+									q: query,
+									query_by: 'content,author_name',
+									highlight_full_fields: 'content,author_name',
+									per_page: 5,
+								},
+								{
+									collection: 'users',
+									q: query,
+									query_by: 'username,bio,specialty,location,tags',
+									highlight_full_fields: 'username,bio,specialty,location,tags',
+									per_page: 5,
+								},
+								{
+									collection: 'practitioners',
+									q: query,
+									query_by: 'full_name,location,specialty',
+									highlight_full_fields: 'full_name,location,specialty',
+									per_page: 5,
+								},
+								{
+									collection: 'reviews',
+									q: query,
+									query_by: 'author_name,content',
+									highlight_full_fields: 'author_name,content',
+									per_page: 5,
+								},
+								{
+									collection: 'posts',
+									q: query,
+									query_by: 'author_name,content,title',
+									highlight_full_fields: 'author_name,content,title',
+									per_page: 5,
+								}
+							],
+						});
 
-						return result.hits;
+						const groupedResults = multiSearchResults.results.flatMap((result: any) => result?.hits?.map((hit: any) => ({
+							collection: result?.request_params?.collection_name,
+							document: hit?.document,
+							highlight: hit?.highlight,
+						}))).reduce((acc: any, current: any) => {
+							if (!acc[current.collection]) {
+								acc[current.collection] = [];
+							}
+							acc[current.collection].push(current);
+							return acc;
+						}, {});
+
+						return Object.keys(groupedResults).map((collectionName: string) => ({
+							sourceId: collectionName,
+							items: groupedResults[collectionName],
+						}));
 					},
 					getItemInputValue({ item }: any) {
-						return item.document.title;
+						return null;
 					},
 				}
 			];
@@ -58,34 +115,34 @@ const SearchWithFilter = () => {
 	});
 
 	const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-		autocomplete.setQuery(event.target.value);
+		autocomplete?.setQuery(event.target.value);
 		setQuery(event.target.value);
 
 		if (event.target.value.trim() !== '') {
-			autocomplete.setIsOpen(true);
+			autocomplete?.setIsOpen(true);
 		} else {
-			autocomplete.setIsOpen(false);
+			autocomplete?.setIsOpen(false);
 		}
-		autocomplete.refresh();
+		autocomplete?.refresh();
 	};
 
 	useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setDebouncedQuery(query);
-    }, 300);
+		const timeoutId = setTimeout(() => {
+			setDebouncedQuery(query);
+		}, 300);
 
-    return () => clearTimeout(timeoutId);
-  }, [query]);
+		return () => clearTimeout(timeoutId);
+	}, [query]);
 
-  useEffect(() => {
-    if (debouncedQuery) {
-      autocomplete.setQuery(debouncedQuery);
-      autocomplete.setIsOpen(true);
-    } else {
-      autocomplete.setIsOpen(false);
-    }
-    autocomplete.refresh();
-  }, [debouncedQuery]);
+	useEffect(() => {
+		if (debouncedQuery) {
+			autocomplete?.setQuery(debouncedQuery);
+			autocomplete?.setIsOpen(true);
+		} else {
+			autocomplete?.setIsOpen(false);
+		}
+		autocomplete?.refresh();
+	}, [debouncedQuery]);
 
 	return (
 		<div className="min-w-screen relative">
@@ -96,12 +153,11 @@ const SearchWithFilter = () => {
 				onSubmit={(event) => {
 					event.preventDefault();
 					event.stopPropagation();
-					if (inputRef.current) {
-						inputRef.current.blur();
+					if (inputRef?.current) {
+						inputRef?.current.blur();
 					}
 				}}
-				className="max-w-md flex flex-col mx-auto relative" // <-- flex-col
-			>
+				className="max-w-2xl flex flex-col mx-auto relative">
 				<div className="relative w-full">
 					<span className="absolute bg-gray-900 dark:bg-white rounded-full p-2 top-3 left-1">
 						<MagnifyingGlassIcon className="w-5 h-5 text-white dark:text-gray-900" />
@@ -118,8 +174,8 @@ const SearchWithFilter = () => {
 						onChange={handleInput}
 						onFocus={() => {
 							if (query?.trim()) {
-								autocomplete.setIsOpen(true);
-								autocomplete.refresh();
+								autocomplete?.setIsOpen(true);
+								autocomplete?.refresh();
 							}
 						}}
 						placeholder="Type keywords"
@@ -133,24 +189,47 @@ const SearchWithFilter = () => {
 					</button>
 				</div>
 
-				{autocompleteState.isOpen && (
-					<div
-						className="absolute top-full mt-2 w-full rounded-md bg-gray-900 text-white dark:bg-white dark:text-gray-900 shadow-lg z-10"
-					>
-						{autocompleteState.collections.map((collection: any, index: number) => (
-							<div key={index}>
-								{collection.items.length > 0 ? (
-									<ul>
-										{collection.items.map((item: any, index: number) => (
-											<li
-												key={index}
-												className="cursor-pointer px-4 py-5 hover:bg-gray-800 dark:hover:bg-gray-200 hover:rounded-md">
-												<div className={style.highlighted} dangerouslySetInnerHTML={{ __html: item.highlight.title.value }}></div>
-											</li>
+				{autocompleteState?.isOpen && (
+					<div className="absolute top-full mt-2 w-full rounded-md bg-gray-900 text-white dark:bg-white dark:text-gray-900 shadow-lg z-10 max-h-96 overflow-y-auto overflow-x-hidden">
+						{autocompleteState?.collections?.map((collection: any, index: number) => (
+							<div key={index} className="mb-4">
+								{collection?.items?.length > 0 ? (
+									<>
+										{collection.items.map((item: any, itemIndex: number) => (
+											<>
+												<h6 className="text-sm font-bold px-4 py-2 capitalize relative inline-block">
+													{item?.sourceId} Results
+													<span className="absolute left-full top-1/2 w-xl h-px bg-white dark:bg-gray-900 transform -translate-y-1/4"></span>
+												</h6>
+												<ul>
+													{item.items.map((subItem: any, subItemIndex: number) => (
+														<li
+															key={subItemIndex}
+															className="cursor-pointer px-8 py-3 hover:bg-gray-800 dark:hover:bg-gray-300 hover:rounded-md">
+															<div
+																className={style.highlighted}
+																dangerouslySetInnerHTML={{ __html: subItem?.highlight?.title?.value || subItem.document.title }}>
+															</div>
+															<div
+																className={style.highlighted}
+																dangerouslySetInnerHTML={{ __html: subItem?.highlight?.content?.value || subItem.document.content }}>
+															</div>
+															<div
+																className={style.highlighted}
+																dangerouslySetInnerHTML={{ __html: subItem?.highlight?.author_name?.value || subItem.document.author_name }}>
+															</div>
+															<div
+																className={style.highlighted}
+																dangerouslySetInnerHTML={{ __html: subItem?.highlight?.address?.value || subItem.document.address }}>
+															</div>
+														</li>
+													))}
+												</ul>
+											</>
 										))}
-									</ul>
+									</>
 								) : (
-									<div className="p-4 text-gray-500">No results</div>
+									<div className="p-4 text-gray-500">No results found</div>
 								)}
 							</div>
 						))}
