@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "@/styles/globals.scss";
-import './globals.css';
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Smart Search",
@@ -9,12 +9,10 @@ export const metadata: Metadata = {
 
 const RootLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
   return (
-    <html lang="en" data-theme="dark">
-      <body className={'antialiased'}>
-        {children}
-      </body>
+    <html lang="en" data-theme="light">
+      <body className={"antialiased"}>{children}</body>
     </html>
   );
-}
+};
 
-export default RootLayout
+export default RootLayout;

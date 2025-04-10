@@ -1,52 +1,66 @@
-import articles from '../data/articles.json';
-import articleSchema from '../schemas/articles';
-import comments from '../data/comments.json';
-import commentSchema from '../schemas/comments';
-import locations from '../data/locations.json';
-import locationSchema from '../schemas/locations';
-import posts from '../data/posts.json';
-import postSchema from '../schemas/posts';
-import practitioners from '../data/practitioners.json';
-import practitionerSchema from '../schemas/practitioners';
-import reviews from '../data/reviews.json';
-import reviewSchema from '../schemas/reviews';
-import users from '../data/users.json';
-import userSchema from '../schemas/users';
+import articles from "../data/articles.json";
+import articleSchema from "../schemas/articles";
+import comments from "../data/comments.json";
+import commentSchema from "../schemas/comments";
+import locations from "../data/locations.json";
+import locationSchema from "../schemas/locations";
+import forumPosts from "../data/forum_posts.json";
+import postSchema from "../schemas/forum_posts";
+import practitioners from "../data/practitioners.json";
+import practitionerSchema from "../schemas/practitioners";
+import reviews from "../data/reviews.json";
+import reviewSchema from "../schemas/reviews";
+import users from "../data/users.json";
+import userSchema from "../schemas/users";
+import socialPosts from "../data/social_posts.json";
+import socialPostSchema from "../schemas/social_posts";
+import videos from "../data/videos.json";
+import videoSchema from "../schemas/videos";
 
 export const collections = [
 	{
-		name: 'articles',
+		name: "articles",
 		schema: articleSchema,
 		data: articles,
 	},
 	{
-		name: 'comments',
+		name: "comments",
 		schema: commentSchema,
 		data: comments,
 	},
 	{
-		name: 'locations',
+		name: "locations",
 		schema: locationSchema,
 		data: locations,
 	},
 	{
-		name: 'posts',
+		name: "forum_posts",
 		schema: postSchema,
-		data: posts,
+		data: forumPosts,
 	},
 	{
-		name: 'practitioners',
+		name: "practitioners",
 		schema: practitionerSchema,
 		data: practitioners,
 	},
 	{
-		name: 'reviews',
+		name: "reviews",
 		schema: reviewSchema,
 		data: reviews,
 	},
 	{
-		name: 'users',
+		name: "users",
 		schema: userSchema,
 		data: users,
+	},
+	{
+		name: "social_posts",
+		schema: socialPostSchema,
+		data: socialPosts,
+	},
+	{
+		name: "videos",
+		schema: videoSchema,
+		data: videos,
 	},
 ];

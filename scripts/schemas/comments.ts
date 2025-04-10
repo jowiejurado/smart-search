@@ -3,15 +3,13 @@ const commentSchema = {
 	enable_nested_fields: true,
 	fields: [
 		{ name: "id", type: "string" },
-    { name: "content", type: "string" },
-    { name: "author_id", type: "string" },
-    { name: "author_name", type: "string" },
-    { name: "post_id", type: "string" },
-    { name: "popularity", type: "int32" },
-    { name: "created_at", type: "int64" },
+		{ name: "content_id", type: "string" },
+		{ name: "type", type: "string" },
+		{ name: "text", type: "string" },
+		{ name: "author", type: "string" },
+		{ name: "date", type: "string" },
 	],
-	default_sorting_field: "popularity",
-	symbols_to_index: ["#"]
+	symbols_to_index: ["#"],
 } as const;
 
 export default commentSchema;

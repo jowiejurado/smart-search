@@ -3,16 +3,14 @@ const reviewSchema = {
 	enable_nested_fields: true,
 	fields: [
 		{ name: "id", type: "string" },
-    { name: "content", type: "string" },
-    { name: "rating", type: "int32", facet: true },
-    { name: "author_id", type: "string" },
-    { name: "author_name", type: "string" },
-    { name: "practitioner_id", type: "string" },
-    { name: "popularity", type: "int32" },
-    { name: "created_at", type: "int64" },
+		{ name: "rating", type: "int32" },
+		{ name: "text", type: "string" },
+		{ name: "reviewer", type: "string" },
+		{ name: "target_type", type: "string" },
+		{ name: "target_id", type: "string" },
+		{ name: "date", type: "string" },
 	],
-	default_sorting_field: "popularity",
-	symbols_to_index: ["#"]
+	symbols_to_index: ["#"],
 } as const;
 
 export default reviewSchema;
