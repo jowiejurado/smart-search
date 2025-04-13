@@ -1,19 +1,21 @@
-'use client';
+"use client";
 
-import React, { useState, useRef, useEffect } from 'react';
-import Typesense from 'typesense';
-import { createAutocomplete } from '@algolia/autocomplete-core';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
+import React, { useState, useRef, useEffect } from "react";
+import Typesense from "typesense";
+import { createAutocomplete } from "@algolia/autocomplete-core";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import style from "./SearchWithFilter.module.scss";
 
 const SearchWithFilter = () => {
-	const [autocompleteState, setAutocompleteState] = useState<any>({ collections: [] });
+	const [autocompleteState, setAutocompleteState] = useState<any>({
+		collections: [],
+	});
 	const inputRef = useRef<HTMLInputElement>(null);
-	const [query, setQuery] = useState('');
-	const [debouncedQuery, setDebouncedQuery] = useState('');
+	const [query, setQuery] = useState("");
+	const [debouncedQuery, setDebouncedQuery] = useState("");
 
 	const autocomplete = createAutocomplete({
-		placeholder: 'Type keywords...',
+		placeholder: "Type keywords...",
 		openOnFocus: true,
 		onStateChange({ state }) {
 			setAutocompleteState(state);
@@ -22,7 +24,7 @@ const SearchWithFilter = () => {
 			if (!query) return [];
 
 			const typesenseClient = new Typesense.Client({
-				apiKey: process.env.NEXT_PUBLIC_TYPESENSE_SEARCH_ONLY_API_KEY ?? 'xyz',
+				apiKey: process.env.NEXT_PUBLIC_TYPESENSE_SEARCH_ONLY_API_KEY ?? "xyz",
 				nodes: [
 					{
 						url: `${process.env.NEXT_PUBLIC_TYPESENSE_PROTOCOL}://${process.env.NEXT_PUBLIC_TYPESENSE_HOST}`,
@@ -33,92 +35,114 @@ const SearchWithFilter = () => {
 
 			return [
 				{
-					sourceId: 'multi-search',
+					sourceId: "multi-search",
 					async getItems() {
-						const multiSearchResults = await typesenseClient.multiSearch.perform({
-							searches: [
-								{
-									collection: 'articles',
-									q: query,
-									query_by: 'title,tags,author_name',
-									highlight_full_fields: 'title,tags,author_name',
-									per_page: 5,
-								},
-								{
-									collection: 'locations',
-									q: query,
-									query_by: 'address',
-									highlight_full_fields: 'address',
-									per_page: 5,
-								},
-								{
-									collection: 'comments',
-									q: query,
-									query_by: 'content,author_name',
-									highlight_full_fields: 'content,author_name',
-									per_page: 5,
-								},
-								{
-									collection: 'users',
-									q: query,
-									query_by: 'username,bio,specialty,location,tags',
-									highlight_full_fields: 'username,bio,specialty,location,tags',
-									per_page: 5,
-								},
-								{
-									collection: 'practitioners',
-									q: query,
-									query_by: 'full_name,location,specialty',
-									highlight_full_fields: 'full_name,location,specialty',
-									per_page: 5,
-								},
-								{
-									collection: 'reviews',
-									q: query,
-									query_by: 'author_name,content',
-									highlight_full_fields: 'author_name,content',
-									per_page: 5,
-								},
-								{
-									collection: 'posts',
-									q: query,
-									query_by: 'author_name,content,title',
-									highlight_full_fields: 'author_name,content,title',
-									per_page: 5,
+						const multiSearchResults =
+							await typesenseClient.multiSearch.perform({
+								searches: [
+									{
+										collection: "articles",
+										q: query,
+										query_by: "title,tags,author,summary",
+										highlight_full_fields: "title,tags,author,summary",
+										per_page: 5,
+									},
+									{
+										collection: "locations",
+										q: query,
+										query_by: "city,state,country",
+										highlight_full_fields: "city,state,country",
+										per_page: 5,
+									},
+									{
+										collection: "comments",
+										q: query,
+										query_by: "text,author,type",
+										highlight_full_fields: "text,author,type",
+										per_page: 5,
+									},
+									{
+										collection: "users",
+										q: query,
+										query_by: "name,bio,roles,location",
+										highlight_full_fields: "name,bio,roles,location",
+										per_page: 5,
+									},
+									{
+										collection: "practitioners",
+										q: query,
+										query_by: "name,specialties,location,bio,certifications",
+										highlight_full_fields:
+											"name,specialties,location,bio,certifications",
+										per_page: 5,
+									},
+									{
+										collection: "reviews",
+										q: query,
+										query_by: "text,reviewer",
+										highlight_full_fields: "text,reviewer",
+										per_page: 5,
+									},
+									{
+										collection: "forum_posts",
+										q: query,
+										query_by: "author,category,title,body",
+										highlight_full_fields: "author,category,title,body",
+										per_page: 5,
+									},
+									{
+										collection: "social_posts",
+										q: query,
+										query_by: "user,text,tags",
+										highlight_full_fields: "user,text,tags",
+										per_page: 5,
+									},
+									{
+										collection: "videos",
+										q: query,
+										query_by: "summary,uploaded_by,title,tags",
+										highlight_full_fields: "summary,uploaded_by,title,tags",
+										per_page: 5,
+									},
+								],
+							});
+
+						const groupedResults = multiSearchResults.results
+							.flatMap((result: any) =>
+								result?.hits?.map((hit: any) => ({
+									collection: result?.request_params?.collection_name,
+									document: hit?.document,
+									highlight: hit?.highlight,
+								}))
+							)
+							.reduce((acc: any, current: any) => {
+								if (!acc[current.collection]) {
+									acc[current.collection] = [];
 								}
-							],
-						});
+								acc[current.collection].push(current);
+								return acc;
+							}, {});
 
-						const groupedResults = multiSearchResults.results.flatMap((result: any) => result?.hits?.map((hit: any) => ({
-							collection: result?.request_params?.collection_name,
-							document: hit?.document,
-							highlight: hit?.highlight,
-						}))).reduce((acc: any, current: any) => {
-							if (!acc[current.collection]) {
-								acc[current.collection] = [];
-							}
-							acc[current.collection].push(current);
-							return acc;
-						}, {});
-
-						return Object.keys(groupedResults).map((collectionName: string) => ({
-							sourceId: collectionName,
-							items: groupedResults[collectionName],
-						}));
+						return Object.keys(groupedResults).map(
+							(collectionName: string) => ({
+								sourceId: collectionName,
+								items: groupedResults[collectionName],
+							})
+						);
 					},
 					getItemInputValue({ item }: any) {
 						return null;
 					},
-				}
+				},
 			];
-		}
+		},
 	});
 
 	const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
 		autocomplete?.setQuery(event.target.value);
 		setQuery(event.target.value);
 
-		if (event.target.value.trim() !== '') {
+		if (event.target.value.trim() !== "") {
 			autocomplete?.setIsOpen(true);
 		} else {
 			autocomplete?.setIsOpen(false);
@@ -157,7 +181,8 @@ const SearchWithFilter = () => {
 						inputRef?.current.blur();
 					}
 				}}
-				className="max-w-2xl flex flex-col mx-auto relative">
+				className="max-w-2xl flex flex-col mx-auto relative"
+			>
 				<div className="relative w-full">
 					<span className="absolute bg-gray-900 dark:bg-white rounded-full p-2 top-3 left-1">
 						<MagnifyingGlassIcon className="w-5 h-5 text-white dark:text-gray-900" />
@@ -191,53 +216,356 @@ const SearchWithFilter = () => {
 
 				{autocompleteState?.isOpen && (
 					<div className="absolute top-full mt-2 w-full rounded-md bg-gray-900 text-white dark:bg-white dark:text-gray-900 shadow-lg z-10 max-h-96 overflow-y-auto overflow-x-hidden">
-						{autocompleteState?.collections?.map((collection: any, index: number) => (
-							<div key={index} className="mb-4">
-								{collection?.items?.length > 0 ? (
-									<>
-										{collection.items.map((item: any, itemIndex: number) => (
-											<>
-												<h6 className="text-sm font-bold px-4 py-2 capitalize relative inline-block">
-													{item?.sourceId} Results
-													<span className="absolute left-full top-1/2 w-xl h-px bg-white dark:bg-gray-900 transform -translate-y-1/4"></span>
-												</h6>
-												<ul>
-													{item.items.map((subItem: any, subItemIndex: number) => (
-														<li
-															key={subItemIndex}
-															className="cursor-pointer px-8 py-3 hover:bg-gray-800 dark:hover:bg-gray-300 hover:rounded-md">
-															<div
-																className={style.highlighted}
-																dangerouslySetInnerHTML={{ __html: subItem?.highlight?.title?.value || subItem.document.title }}>
-															</div>
-															<div
-																className={style.highlighted}
-																dangerouslySetInnerHTML={{ __html: subItem?.highlight?.content?.value || subItem.document.content }}>
-															</div>
-															<div
-																className={style.highlighted}
-																dangerouslySetInnerHTML={{ __html: subItem?.highlight?.author_name?.value || subItem.document.author_name }}>
-															</div>
-															<div
-																className={style.highlighted}
-																dangerouslySetInnerHTML={{ __html: subItem?.highlight?.address?.value || subItem.document.address }}>
-															</div>
-														</li>
-													))}
-												</ul>
-											</>
-										))}
-									</>
-								) : (
-									<div className="p-4 text-gray-500">No results found</div>
-								)}
-							</div>
-						))}
+						{autocompleteState?.collections?.map(
+							(collection: any, index: number) => (
+								<div key={index}>
+									{collection?.items?.length > 0 ? (
+										<>
+											{collection.items.map((item: any, itemIndex: number) => (
+												<div key={itemIndex} className="mb-4">
+													<h6 className="text-sm font-bold px-4 py-2 capitalize relative inline-block">
+														{item?.sourceId.replace("_", " ")} Results
+														<span className="absolute left-full top-1/2 w-xl h-px bg-white dark:bg-gray-900 transform -translate-y-1/4"></span>
+													</h6>
+													<ul>
+														{item.items.map(
+															(subItem: any, subItemIndex: number) => (
+																<li
+																	key={subItemIndex}
+																	className="cursor-pointer px-8 py-3 flex flex-col gap-y-3 hover:bg-gray-800 dark:hover:bg-gray-300 hover:rounded-md"
+																>
+																	{item.sourceId === "articles" ? (
+																		<>
+																			<div className="flex gap-x-2 font-black">
+																				<div
+																					className={style.highlighted}
+																					dangerouslySetInnerHTML={{
+																						__html:
+																							subItem?.highlight?.title
+																								?.value ||
+																							subItem.document.title,
+																					}}
+																				></div>
+																				•
+																				<div
+																					className={style.highlighted}
+																					dangerouslySetInnerHTML={{
+																						__html:
+																							subItem?.highlight?.author
+																								?.value ||
+																							subItem.document.author,
+																					}}
+																				></div>
+																			</div>
+																			{subItem?.document?.tags?.length > 0 ? (
+																				<div className="flex gap-x-2 text-sm text-gray-300">
+																					{subItem?.document?.tags?.map(
+																						(tag: any, tagIndex: number) => (
+																							<div
+																								key={tagIndex}
+																								className={`${style.highlighted} bg-gray-700 dark:bg-gray-300 text-white dark:text-gray-900 rounded-full px-2 py-1`}
+																								dangerouslySetInnerHTML={{
+																									__html: tag,
+																								}}
+																							></div>
+																						)
+																					)}
+																				</div>
+																			) : null}
+																			<div className="flex gap-x-2 text-sm text-gray-300 dark:text-gray-900">
+																				<div
+																					className={style.highlighted}
+																					dangerouslySetInnerHTML={{
+																						__html:
+																							subItem?.highlight?.summary
+																								?.value ||
+																							subItem.document.summary,
+																					}}
+																				></div>
+																			</div>
+																		</>
+																	) : null}
+
+																	{item.sourceId === "locations" ? (
+																		<div className="flex gap-x-2 font-black">
+																			<div
+																				className={style.highlighted}
+																				dangerouslySetInnerHTML={{
+																					__html:
+																						subItem?.highlight?.city?.value ||
+																						subItem.document.city,
+																				}}
+																			></div>
+																			<div
+																				className={style.highlighted}
+																				dangerouslySetInnerHTML={{
+																					__html:
+																						subItem?.highlight?.state?.value ||
+																						subItem.document.state,
+																				}}
+																			></div>
+																			<div
+																				className={style.highlighted}
+																				dangerouslySetInnerHTML={{
+																					__html:
+																						subItem?.highlight?.country
+																							?.value ||
+																						subItem.document.country,
+																				}}
+																			></div>
+																		</div>
+																	) : null}
+
+																	{item.sourceId === "comments" ? (
+																		<div className="flex flex-col gap-y-2">
+																			<div
+																				className={`${style.highlighted} font-black`}
+																				dangerouslySetInnerHTML={{
+																					__html:
+																						subItem?.highlight?.text?.value ||
+																						subItem.document.text,
+																				}}
+																			></div>
+																			<div
+																				className={`${style.highlighted} text-xs text-gray-200 dark:text-gray-900`}
+																				dangerouslySetInnerHTML={{
+																					__html: subItem?.highlight?.author
+																						?.value
+																						? `Commented by: ${subItem.highlight.author.value}`
+																						: `Commented by: ${subItem.document.author}`,
+																				}}
+																			></div>
+																		</div>
+																	) : null}
+
+																	{item.sourceId === "users" ? (
+																		<div className="flex flex-col gap-y-2">
+																			<div
+																				className={`${style.highlighted} font-black`}
+																				dangerouslySetInnerHTML={{
+																					__html:
+																						subItem?.highlight?.name?.value ||
+																						subItem.document.text,
+																				}}
+																			></div>
+																			<div
+																				className={`${style.highlighted} text-xs text-gray-200 dark:text-gray-900`}
+																				dangerouslySetInnerHTML={{
+																					__html: subItem?.highlight?.bio?.value
+																						? subItem.highlight.bio.value
+																						: subItem.document.bio,
+																				}}
+																			></div>
+																			<div
+																				className={`${style.highlighted} text-xs text-gray-200 dark:text-gray-900`}
+																				dangerouslySetInnerHTML={{
+																					__html: subItem?.highlight?.location
+																						?.value
+																						? subItem.highlight.location.value
+																						: subItem.document.location,
+																				}}
+																			></div>
+																		</div>
+																	) : null}
+
+																	{item.sourceId === "practitioners" ? (
+																		<div className="flex flex-col gap-y-2">
+																			<div
+																				className={`${style.highlighted} font-black`}
+																				dangerouslySetInnerHTML={{
+																					__html:
+																						subItem?.highlight?.name?.value ||
+																						subItem.document.text,
+																				}}
+																			></div>
+
+																			<div className="flex flex-wrap gap-x-2 gap-y-2">
+																				{subItem?.highlight?.specialties
+																					?.length > 0 ? (
+																					<div className="flex gap-x-2 text-sm text-gray-300">
+																						{subItem?.highlight?.specialties?.map(
+																							(
+																								specialty: any,
+																								specialtyIndex: number
+																							) => (
+																								<div
+																									key={specialtyIndex}
+																									className={`${style.highlighted} bg-gray-700 dark:bg-gray-300 text-white dark:text-gray-900 rounded-full px-2 py-1`}
+																									dangerouslySetInnerHTML={{
+																										__html: specialty.value,
+																									}}
+																								></div>
+																							)
+																						)}
+																					</div>
+																				) : null}
+
+																				{subItem?.highlight?.certifications
+																					?.length > 0 ? (
+																					<div className="flex gap-x-2 text-sm text-gray-300">
+																						{subItem?.highlight?.certifications?.map(
+																							(
+																								certification: any,
+																								certificationIndex: number
+																							) => (
+																								<div
+																									key={certificationIndex}
+																									className={`${style.highlighted} bg-gray-700 dark:bg-gray-300 text-white dark:text-gray-900 rounded-full px-2 py-1`}
+																									dangerouslySetInnerHTML={{
+																										__html: certification.value,
+																									}}
+																								></div>
+																							)
+																						)}
+																					</div>
+																				) : null}
+																			</div>
+																		</div>
+																	) : null}
+
+																	{item.sourceId === "reviews" ? (
+																		<div className="flex flex-col gap-y-2">
+																			<div
+																				className={`${style.highlighted} font-black`}
+																				dangerouslySetInnerHTML={{
+																					__html:
+																						subItem?.highlight?.text?.value ||
+																						subItem.document.text,
+																				}}
+																			></div>
+																			<div
+																				className={`${style.highlighted} text-xs text-gray-200 dark:text-gray-900`}
+																				dangerouslySetInnerHTML={{
+																					__html: subItem?.highlight?.reviewer
+																						?.value
+																						? `Reviewed by: ${subItem.highlight.reviewer.value}`
+																						: `Reviewed by: ${subItem.document.reviewer}`,
+																				}}
+																			></div>
+																		</div>
+																	) : null}
+
+																	{item.sourceId === "forum_posts" ? (
+																		<div className="flex flex-col gap-y-2">
+																			<div className="flex flex-wrap gap-x-2">
+																				<div
+																					className={`${style.highlighted} font-black`}
+																					dangerouslySetInnerHTML={{
+																						__html:
+																							subItem?.highlight?.title
+																								?.value ||
+																							subItem.document.title,
+																					}}
+																				></div>
+																				•
+																				<div
+																					className={style.highlighted}
+																					dangerouslySetInnerHTML={{
+																						__html:
+																							subItem?.highlight?.category
+																								?.value ||
+																							subItem.document.category,
+																					}}
+																				></div>
+																			</div>
+																			<div
+																				className={`${style.highlighted} font-black`}
+																				dangerouslySetInnerHTML={{
+																					__html:
+																						subItem?.highlight?.body?.value ||
+																						subItem.document.body,
+																				}}
+																			></div>
+																			<div
+																				className={`${style.highlighted} text-xs text-gray-200 dark:text-gray-900`}
+																				dangerouslySetInnerHTML={{
+																					__html: subItem?.highlight?.author
+																						?.value
+																						? `Authored by: ${subItem.highlight.author.value}`
+																						: `Authored by: ${subItem.document.author}`,
+																				}}
+																			></div>
+																		</div>
+																	) : null}
+
+																	{item.sourceId === "videos" ? (
+																		<div className="flex flex-col gap-y-2">
+																			<div className="flex flex-wrap gap-x-2">
+																				<div
+																					className={`${style.highlighted} font-black`}
+																					dangerouslySetInnerHTML={{
+																						__html:
+																							subItem?.highlight?.title
+																								?.value ||
+																							subItem.document.title,
+																					}}
+																				></div>
+																				•
+																				<div
+																					className={style.highlighted}
+																					dangerouslySetInnerHTML={{
+																						__html:
+																							subItem?.highlight?.duration
+																								?.value ||
+																							subItem.document.duration,
+																					}}
+																				></div>
+																			</div>
+
+																			{subItem?.document?.tags?.length > 0 ? (
+																				<div className="flex gap-x-2 text-sm text-gray-300">
+																					{subItem?.document?.tags?.map(
+																						(tag: any, tagIndex: number) => (
+																							<div
+																								key={tagIndex}
+																								className={`${style.highlighted} bg-gray-700 capitalize dark:bg-gray-300 text-white dark:text-gray-900 rounded-full px-2 py-1`}
+																								dangerouslySetInnerHTML={{
+																									__html: tag,
+																								}}
+																							></div>
+																						)
+																					)}
+																				</div>
+																			) : null}
+
+																			<div
+																				className={`${style.highlighted} font-black`}
+																				dangerouslySetInnerHTML={{
+																					__html:
+																						subItem?.highlight?.summary
+																							?.value ||
+																						subItem.document.summary,
+																				}}
+																			></div>
+																			<div
+																				className={`${style.highlighted} text-xs text-gray-200 dark:text-gray-900`}
+																				dangerouslySetInnerHTML={{
+																					__html: subItem?.highlight
+																						?.uploaded_by?.value
+																						? `Uploaded by: ${subItem.highlight.uploaded_by.value}`
+																						: `Uploaded by: ${subItem.document.uploaded_by}`,
+																				}}
+																			></div>
+																		</div>
+																	) : null}
+																</li>
+															)
+														)}
+													</ul>
+												</div>
+											))}
+										</>
+									) : (
+										<div className="p-4 text-gray-500">No results found</div>
+									)}
+								</div>
+							)
+						)}
 					</div>
 				)}
 			</form>
 		</div>
 	);
-}
+};
 
-export default SearchWithFilter
+export default SearchWithFilter;
