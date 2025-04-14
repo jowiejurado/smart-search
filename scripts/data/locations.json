@@ -6,5 +6,77 @@
 		"country": "USA",
 		"latitude": 30.2672,
 		"longitude": -97.7431
+	},
+	{
+		"id": "l2",
+		"city": "Portland",
+		"state": "OR",
+		"country": "USA",
+		"latitude": 45.5051,
+		"longitude": -122.675
+	},
+	{
+		"id": "l3",
+		"city": "Vancouver",
+		"state": "BC",
+		"country": "Canada",
+		"latitude": 49.2827,
+		"longitude": -123.1207
+	},
+	{
+		"id": "l4",
+		"city": "Sydney",
+		"state": "NSW",
+		"country": "Australia",
+		"latitude": -33.8688,
+		"longitude": 151.2093
+	},
+	{
+		"id": "l5",
+		"city": "Berlin",
+		"state": "BE",
+		"country": "Germany",
+		"latitude": 52.52,
+		"longitude": 13.405
+	},
+	{
+		"id": "l6",
+		"city": "Cape Town",
+		"state": "WC",
+		"country": "South Africa",
+		"latitude": -33.9249,
+		"longitude": 18.4241
+	},
+	{
+		"id": "l7",
+		"city": "Tokyo",
+		"state": "Tokyo",
+		"country": "Japan",
+		"latitude": 35.6762,
+		"longitude": 139.6503
+	},
+	{
+		"id": "l8",
+		"city": "Paris",
+		"state": "Île-de-France",
+		"country": "France",
+		"latitude": 48.8566,
+		"longitude": 2.3522
+	},
+	{
+		"id": "l9",
+		"city": "Mexico City",
+		"state": "CDMX",
+		"country": "Mexico",
+		"latitude": 19.4326,
+		"longitude": -99.1332
+	},
+	{
+		"id": "l10",
+		"city": "Barcelona",
+		"state": "Catalonia",
+		"country": "Spain",
+		"latitude": 41.3851,
+		"longitude": 2.1734
 	}
 ]

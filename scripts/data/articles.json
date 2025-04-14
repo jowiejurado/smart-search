@@ -7,5 +7,86 @@
 		"summary": "An overview of healing herbs used in daily wellness routines.",
 		"body": "Herbal medicine has been used for centuries...",
 		"published_date": "2024-08-01"
+	},
+	{
+		"id": "a2",
+		"title": "Mindful Eating: A Path to Better Health",
+		"tags": ["Nutrition", "Mindfulness"],
+		"author": "Sophia Liu",
+		"summary": "Discover how mindful eating can transform your relationship with food.",
+		"body": "Mindful eating encourages awareness of our eating habits...",
+		"published_date": "2024-08-10"
+	},
+	{
+		"id": "a3",
+		"title": "Exploring the Benefits of Daily Meditation",
+		"tags": ["Meditation", "Mental Health"],
+		"author": "James Carter",
+		"summary": "Daily meditation can significantly improve mental clarity and emotional balance.",
+		"body": "Incorporating meditation into your daily routine...",
+		"published_date": "2024-08-15"
+	},
+	{
+		"id": "a4",
+		"title": "The Science Behind Plant-Based Diets",
+		"tags": ["Plant-Based", "Nutrition"],
+		"author": "Dr. Nia Henderson",
+		"summary": "A look at how plant-based diets impact overall health and wellness.",
+		"body": "Plant-based diets have been linked to numerous health benefits...",
+		"published_date": "2024-08-20"
+	},
+	{
+		"id": "a5",
+		"title": "Essential Oils: Nature's Remedy",
+		"tags": ["Essential Oils", "Holistic Health"],
+		"author": "Laura Kim",
+		"summary": "Understanding how essential oils can enhance your daily self-care practices.",
+		"body": "Essential oils are highly concentrated plant extracts...",
+		"published_date": "2024-08-25"
+	},
+	{
+		"id": "a6",
+		"title": "Yoga for Beginners: Tips and Poses",
+		"tags": ["Yoga", "Fitness"],
+		"author": "Aaron Patel",
+		"summary": "A simple guide to help beginners get started with yoga practice.",
+		"body": "Yoga is a practice that combines physical postures, breathing techniques...",
+		"published_date": "2024-09-01"
+	},
+	{
+		"id": "a7",
+		"title": "Adaptogens: Natural Stress Fighters",
+		"tags": ["Adaptogens", "Stress Management"],
+		"author": "Dr. Maria Gonzalez",
+		"summary": "Explore the world of adaptogens and how they help the body adapt to stress.",
+		"body": "Adaptogens are plants and herbs that help the body resist stressors...",
+		"published_date": "2024-09-05"
+	},
+	{
+		"id": "a8",
+		"title": "Hydration and Health: Beyond Water",
+		"tags": ["Hydration", "Wellness"],
+		"author": "Chris Johnson",
+		"summary": "Learn why hydration is about more than just drinking water.",
+		"body": "Proper hydration plays a vital role in maintaining health...",
+		"published_date": "2024-09-10"
+	},
+	{
+		"id": "a9",
+		"title": "Sleep Hygiene: The Key to Restful Nights",
+		"tags": ["Sleep", "Health Tips"],
+		"author": "Emma Reed",
+		"summary": "Simple strategies to improve your sleep quality and overall health.",
+		"body": "Good sleep hygiene involves habits that help you get a good night's sleep...",
+		"published_date": "2024-09-15"
+	},
+	{
+		"id": "a10",
+		"title": "Decoding Food Labels: What You Need to Know",
+		"tags": ["Nutrition", "Healthy Living"],
+		"author": "Dr. Olivia Adams",
+		"summary": "A practical guide to understanding food labels and making informed choices.",
+		"body": "Reading food labels can empower consumers to make healthier choices...",
+		"published_date": "2024-09-20"
 	}
 ]

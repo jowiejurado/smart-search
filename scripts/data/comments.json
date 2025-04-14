@@ -6,5 +6,77 @@
 		"text": "Really helpful info on herbal use!",
 		"author": "natural_guy",
 		"date": "2025-01-15"
+	},
+	{
+		"id": "c2",
+		"content_id": "a2",
+		"type": "article",
+		"text": "Mindful eating changed my life. Thanks for this!",
+		"author": "health_enthusiast",
+		"date": "2025-01-16"
+	},
+	{
+		"id": "c3",
+		"content_id": "a3",
+		"type": "article",
+		"text": "I never knew meditation could be this simple to start.",
+		"author": "zen_seeker",
+		"date": "2025-01-16"
+	},
+	{
+		"id": "c4",
+		"content_id": "a4",
+		"type": "article",
+		"text": "Plant-based diets are the future. Great read!",
+		"author": "green_guru",
+		"date": "2025-01-17"
+	},
+	{
+		"id": "c5",
+		"content_id": "a5",
+		"type": "article",
+		"text": "Essential oils have helped me sleep better at night.",
+		"author": "aroma_fan",
+		"date": "2025-01-17"
+	},
+	{
+		"id": "c6",
+		"content_id": "a6",
+		"type": "article",
+		"text": "Perfect guide for yoga newbies like me!",
+		"author": "stretching_cat",
+		"date": "2025-01-18"
+	},
+	{
+		"id": "c7",
+		"content_id": "a7",
+		"type": "article",
+		"text": "Adaptogens are a game-changer for my stress levels.",
+		"author": "calm_waves",
+		"date": "2025-01-18"
+	},
+	{
+		"id": "c8",
+		"content_id": "a8",
+		"type": "article",
+		"text": "Never thought about electrolytes before. Thanks for the tips!",
+		"author": "hydration_hacker",
+		"date": "2025-01-19"
+	},
+	{
+		"id": "c9",
+		"content_id": "a9",
+		"type": "article",
+		"text": "Improved my sleep just by changing my bedtime routine.",
+		"author": "dream_chaser",
+		"date": "2025-01-20"
+	},
+	{
+		"id": "c10",
+		"content_id": "a10",
+		"type": "article",
+		"text": "This made grocery shopping so much easier!",
+		"author": "label_reader",
+		"date": "2025-01-20"
 	}
 ]

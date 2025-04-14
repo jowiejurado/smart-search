@@ -6,5 +6,64 @@
 		"location": "Austin, TX",
 		"bio": "Board-certified holistic practitioner with a focus on digestive wellness.",
 		"certifications": ["ND", "Certified Ayurvedic Consultant"]
+	},
+	{
+		"id": "p2",
+		"name": "Sofia Martinez",
+		"specialties": ["Herbal Medicine", "Women's Health"],
+		"location": "Portland, OR",
+		"bio": "Herbalist specializing in natural therapies for hormonal balance and reproductive health.",
+		"certifications": ["RH (AHG)", "Certified Herbalist"]
+	},
+	{
+		"id": "p3",
+		"name": "Kenji Tanaka",
+		"specialties": ["Acupuncture", "Pain Management"],
+		"location": "Tokyo, Tokyo",
+		"bio": "Licensed acupuncturist helping clients manage chronic pain through traditional Chinese medicine.",
+		"certifications": ["L.Ac", "Dipl. Ac."]
+	},
+	{
+		"id": "p4",
+		"name": "Amélie Dupont",
+		"specialties": ["Naturopathy", "Detoxification"],
+		"location": "Paris, Île-de-France",
+		"bio": "Naturopath passionate about guiding individuals through safe and effective detox programs.",
+		"certifications": ["ND", "Certified Detox Specialist"]
+	},
+	{
+		"id": "p5",
+		"name": "Liam O'Connor",
+		"specialties": ["Mindfulness", "Stress Reduction"],
+		"location": "Vancouver, BC",
+		"bio": "Mindfulness coach focusing on meditation techniques for mental clarity and emotional balance.",
+		"certifications": [
+			"Certified Mindfulness Teacher",
+			"Yoga Instructor (RYT 500)"
+		]
+	},
+	{
+		"id": "p6",
+		"name": "Zanele Nkosi",
+		"specialties": ["Traditional Healing", "Energy Work"],
+		"location": "Cape Town, WC",
+		"bio": "Traditional healer integrating ancestral knowledge with modern energy therapies.",
+		"certifications": ["Registered Traditional Healer"]
+	},
+	{
+		"id": "p7",
+		"name": "Carlos Herrera",
+		"specialties": ["Nutrition", "Weight Management"],
+		"location": "Mexico City, CDMX",
+		"bio": "Holistic nutritionist specializing in sustainable weight management and metabolic health.",
+		"certifications": ["Certified Holistic Nutritionist", "Health Coach (CHC)"]
+	},
+	{
+		"id": "p8",
+		"name": "Emma Johansson",
+		"specialties": ["Functional Medicine", "Autoimmune Disorders"],
+		"location": "Berlin, BE",
+		"bio": "Functional medicine practitioner helping clients uncover the root causes of autoimmune conditions.",
+		"certifications": ["IFMCP", "Certified Health Practitioner"]
 	}
 ]

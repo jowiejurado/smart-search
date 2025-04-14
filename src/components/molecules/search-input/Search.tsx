@@ -3,19 +3,26 @@
 import React, { useState, useRef, useEffect } from "react";
 import Typesense from "typesense";
 import { createAutocomplete } from "@algolia/autocomplete-core";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import style from "./SearchWithFilter.module.scss";
+import Icon from "@mdi/react";
+import { mdiLoading, mdiMagnify } from "@mdi/js";
+import style from "./Search.module.scss";
 
-const SearchWithFilter = () => {
+type SearchProps = {
+	summarizeResult: (result: string) => void;
+	isSummarizing: (value: boolean) => void;
+};
+
+const Search = ({ summarizeResult, isSummarizing }: SearchProps) => {
 	const [autocompleteState, setAutocompleteState] = useState<any>({
 		collections: [],
 	});
 	const inputRef = useRef<HTMLInputElement>(null);
 	const [query, setQuery] = useState("");
 	const [debouncedQuery, setDebouncedQuery] = useState("");
+	const [isSearching, setIsSearching] = useState<boolean>(false);
 
 	const autocomplete = createAutocomplete({
-		placeholder: "Type keywords...",
+		placeholder: "Enter keywords to search...",
 		openOnFocus: true,
 		onStateChange({ state }) {
 			setAutocompleteState(state);
@@ -37,105 +44,106 @@ const SearchWithFilter = () => {
 				{
 					sourceId: "multi-search",
 					async getItems() {
-						const multiSearchResults =
-							await typesenseClient.multiSearch.perform({
-								searches: [
-									{
-										collection: "articles",
-										q: query,
-										query_by: "title,tags,author,summary",
-										highlight_full_fields: "title,tags,author,summary",
-										per_page: 5,
-									},
-									{
-										collection: "locations",
-										q: query,
-										query_by: "city,state,country",
-										highlight_full_fields: "city,state,country",
-										per_page: 5,
-									},
-									{
-										collection: "comments",
-										q: query,
-										query_by: "text,author,type",
-										highlight_full_fields: "text,author,type",
-										per_page: 5,
-									},
-									{
-										collection: "users",
-										q: query,
-										query_by: "name,bio,roles,location",
-										highlight_full_fields: "name,bio,roles,location",
-										per_page: 5,
-									},
-									{
-										collection: "practitioners",
-										q: query,
-										query_by: "name,specialties,location,bio,certifications",
-										highlight_full_fields:
-											"name,specialties,location,bio,certifications",
-										per_page: 5,
-									},
-									{
-										collection: "reviews",
-										q: query,
-										query_by: "text,reviewer",
-										highlight_full_fields: "text,reviewer",
-										per_page: 5,
-									},
-									{
-										collection: "forum_posts",
-										q: query,
-										query_by: "author,category,title,body",
-										highlight_full_fields: "author,category,title,body",
-										per_page: 5,
-									},
-									{
-										collection: "social_posts",
-										q: query,
-										query_by: "user,text,tags",
-										highlight_full_fields: "user,text,tags",
-										per_page: 5,
-									},
-									{
-										collection: "videos",
-										q: query,
-										query_by: "summary,uploaded_by,title,tags",
-										highlight_full_fields: "summary,uploaded_by,title,tags",
-										per_page: 5,
-									},
-								],
-							});
+						setIsSearching(true);
 
-						const groupedResults = multiSearchResults.results
-							.flatMap((result: any) =>
-								result?.hits?.map((hit: any) => ({
-									collection: result?.request_params?.collection_name,
-									document: hit?.document,
-									highlight: hit?.highlight,
-								}))
-							)
-							.reduce((acc: any, current: any) => {
-								if (!acc[current.collection]) {
-									acc[current.collection] = [];
-								}
-								acc[current.collection].push(current);
-								return acc;
-							}, {});
+						try {
+							const multiSearchResults =
+								await typesenseClient.multiSearch.perform({
+									searches: [
+										{
+											collection: "articles",
+											q: query,
+											query_by: "title,tags,author,summary",
+											highlight_full_fields: "title,tags,author,summary",
+											per_page: 5,
+										},
+										{
+											collection: "locations",
+											q: query,
+											query_by: "city,state,country",
+											highlight_full_fields: "city,state,country",
+											per_page: 5,
+										},
+										{
+											collection: "comments",
+											q: query,
+											query_by: "text,author,type",
+											highlight_full_fields: "text,author,type",
+											per_page: 5,
+										},
+										{
+											collection: "users",
+											q: query,
+											query_by: "name,bio,roles,location",
+											highlight_full_fields: "name,bio,roles,location",
+											per_page: 5,
+										},
+										{
+											collection: "practitioners",
+											q: query,
+											query_by: "name,specialties,location,bio,certifications",
+											highlight_full_fields:
+												"name,specialties,location,bio,certifications",
+											per_page: 5,
+										},
+										{
+											collection: "reviews",
+											q: query,
+											query_by: "text,reviewer",
+											highlight_full_fields: "text,reviewer",
+											per_page: 5,
+										},
+										{
+											collection: "forum_posts",
+											q: query,
+											query_by: "author,category,title,body",
+											highlight_full_fields: "author,category,title,body",
+											per_page: 5,
+										},
+										{
+											collection: "social_posts",
+											q: query,
+											query_by: "user,text,tags",
+											highlight_full_fields: "user,text,tags",
+											per_page: 5,
+										},
+										{
+											collection: "videos",
+											q: query,
+											query_by: "summary,uploaded_by,title,tags",
+											highlight_full_fields: "summary,uploaded_by,title,tags",
+											per_page: 5,
+										},
+									],
+								});
 
-						const openAiSummary = await fetch("/api/summarize-results", {
-							method: "POST",
-							headers: { "Content-Type": "application/json" },
-							body: JSON.stringify({ results: groupedResults }),
-						})
-						.then((res) => res.json());
+							const groupedResults = multiSearchResults.results
+								.flatMap((result: any) =>
+									result?.hits?.map((hit: any) => ({
+										collection: result?.request_params?.collection_name,
+										document: hit?.document,
+										highlight: hit?.highlight,
+									}))
+								)
+								.reduce((acc: any, current: any) => {
+									if (!acc[current.collection]) {
+										acc[current.collection] = [];
+									}
+									acc[current.collection].push(current);
+									return acc;
+								}, {});
 
-						return Object.keys(groupedResults).map(
-							(collectionName: string) => ({
-								sourceId: collectionName,
-								items: groupedResults[collectionName],
-							})
-						);
+							fetchSummary(groupedResults);
+
+							return Object.keys(groupedResults).map(
+								(collectionName: string) => ({
+									sourceId: collectionName,
+									items: groupedResults[collectionName],
+								})
+							);
+						} finally {
+							setIsSearching(false);
+						}
 					},
 					getItemInputValue({ item }: any) {
 						return null;
@@ -146,10 +154,27 @@ const SearchWithFilter = () => {
 	});
 
 	const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-		autocomplete?.setQuery(event.target.value);
 		setQuery(event.target.value);
+	};
 
-		if (event.target.value.trim() !== "") {
+	const fetchSummary = async (groupResults: any) => {
+		isSummarizing(true);
+		const openAiSummary = await fetch("/api/summarize-results", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				results: groupResults,
+			}),
+		}).then((res: any) => res.json());
+
+		summarizeResult(openAiSummary?.summary);
+		isSummarizing(false);
+	};
+
+	const handleSubmit = () => {
+		autocomplete?.setQuery(query);
+
+		if (query.trim() !== "") {
 			autocomplete?.setIsOpen(true);
 		} else {
 			autocomplete?.setIsOpen(false);
@@ -172,11 +197,12 @@ const SearchWithFilter = () => {
 		} else {
 			autocomplete?.setIsOpen(false);
 		}
+
 		autocomplete?.refresh();
 	}, [debouncedQuery]);
 
 	return (
-		<div className="min-w-screen relative">
+		<div className="min-w-full relative">
 			<form
 				action=""
 				role="search"
@@ -187,12 +213,17 @@ const SearchWithFilter = () => {
 					if (inputRef?.current) {
 						inputRef?.current.blur();
 					}
+					handleSubmit();
 				}}
 				className="max-w-2xl flex flex-col mx-auto relative"
 			>
 				<div className="relative w-full">
 					<span className="absolute bg-gray-900 dark:bg-white rounded-full p-2 top-3 left-1">
-						<MagnifyingGlassIcon className="w-5 h-5 text-white dark:text-gray-900" />
+						<Icon
+							path={mdiMagnify}
+							size={0.9}
+							className="text-white dark:text-gray-900"
+						/>
 					</span>
 					<input
 						ref={inputRef}
@@ -217,7 +248,11 @@ const SearchWithFilter = () => {
 						type="submit"
 						className="absolute bg-gray-900 dark:bg-white rounded-full py-2.5 px-4 top-2.75 right-1 capitalize font-semibold text-white dark:text-gray-900"
 					>
-						Search
+						{isSearching ? (
+							<Icon path={mdiLoading} size={0.8} className="animate-spin" />
+						) : (
+							<>Search</>
+						)}
 					</button>
 				</div>
 
@@ -352,7 +387,7 @@ const SearchWithFilter = () => {
 																				dangerouslySetInnerHTML={{
 																					__html:
 																						subItem?.highlight?.name?.value ||
-																						subItem.document.text,
+																						subItem.document.name,
 																				}}
 																			></div>
 																			<div
@@ -382,24 +417,24 @@ const SearchWithFilter = () => {
 																				dangerouslySetInnerHTML={{
 																					__html:
 																						subItem?.highlight?.name?.value ||
-																						subItem.document.text,
+																						subItem.document.name,
 																				}}
 																			></div>
 
 																			<div className="flex flex-wrap gap-x-2 gap-y-2">
-																				{subItem?.highlight?.specialties
+																				{subItem?.document?.specialties
 																					?.length > 0 ? (
 																					<div className="flex gap-x-2 text-sm text-gray-300">
-																						{subItem?.highlight?.specialties?.map(
+																						{subItem?.document?.specialties?.map(
 																							(
-																								specialty: any,
+																								specialty: string,
 																								specialtyIndex: number
 																							) => (
 																								<div
 																									key={specialtyIndex}
 																									className={`${style.highlighted} bg-gray-700 dark:bg-gray-300 text-white dark:text-gray-900 rounded-full px-2 py-1`}
 																									dangerouslySetInnerHTML={{
-																										__html: specialty.value,
+																										__html: specialty,
 																									}}
 																								></div>
 																							)
@@ -407,19 +442,19 @@ const SearchWithFilter = () => {
 																					</div>
 																				) : null}
 
-																				{subItem?.highlight?.certifications
+																				{subItem?.document?.certifications
 																					?.length > 0 ? (
 																					<div className="flex gap-x-2 text-sm text-gray-300">
-																						{subItem?.highlight?.certifications?.map(
+																						{subItem?.document?.certifications?.map(
 																							(
-																								certification: any,
+																								certification: string,
 																								certificationIndex: number
 																							) => (
 																								<div
 																									key={certificationIndex}
 																									className={`${style.highlighted} bg-gray-700 dark:bg-gray-300 text-white dark:text-gray-900 rounded-full px-2 py-1`}
 																									dangerouslySetInnerHTML={{
-																										__html: certification.value,
+																										__html: certification,
 																									}}
 																								></div>
 																							)
@@ -476,7 +511,7 @@ const SearchWithFilter = () => {
 																				></div>
 																			</div>
 																			<div
-																				className={`${style.highlighted} font-black`}
+																				className={`${style.highlighted} font-black italic text-sm`}
 																				dangerouslySetInnerHTML={{
 																					__html:
 																						subItem?.highlight?.body?.value ||
@@ -490,6 +525,45 @@ const SearchWithFilter = () => {
 																						?.value
 																						? `Authored by: ${subItem.highlight.author.value}`
 																						: `Authored by: ${subItem.document.author}`,
+																				}}
+																			></div>
+																		</div>
+																	) : null}
+
+																	{item.sourceId === "social_posts" ? (
+																		<div className="flex flex-col gap-y-2">
+																			<div
+																				className={`${style.highlighted} font-black`}
+																				dangerouslySetInnerHTML={{
+																					__html:
+																						subItem?.highlight?.text?.value ||
+																						subItem.document.text,
+																				}}
+																			></div>
+
+																			{subItem?.document?.tags?.length > 0 ? (
+																				<div className="flex gap-x-2 text-sm text-gray-300">
+																					{subItem?.document?.tags?.map(
+																						(tag: any, tagIndex: number) => (
+																							<div
+																								key={tagIndex}
+																								className={`${style.highlighted} capitalize bg-gray-700 dark:bg-gray-300 text-white dark:text-gray-900 rounded-full px-2 py-1`}
+																								dangerouslySetInnerHTML={{
+																									__html: tag,
+																								}}
+																							></div>
+																						)
+																					)}
+																				</div>
+																			) : null}
+
+																			<div
+																				className={`${style.highlighted} text-xs text-gray-200 dark:text-gray-900`}
+																				dangerouslySetInnerHTML={{
+																					__html: subItem?.highlight?.user
+																						?.value
+																						? `Posted by: ${subItem.highlight.user.value}`
+																						: `Posted by: ${subItem.document.user}`,
 																				}}
 																			></div>
 																		</div>
@@ -536,7 +610,7 @@ const SearchWithFilter = () => {
 																			) : null}
 
 																			<div
-																				className={`${style.highlighted} font-black`}
+																				className={`${style.highlighted} font-black italic text-sm`}
 																				dangerouslySetInnerHTML={{
 																					__html:
 																						subItem?.highlight?.summary
@@ -544,6 +618,7 @@ const SearchWithFilter = () => {
 																						subItem.document.summary,
 																				}}
 																			></div>
+
 																			<div
 																				className={`${style.highlighted} text-xs text-gray-200 dark:text-gray-900`}
 																				dangerouslySetInnerHTML={{
@@ -575,4 +650,4 @@ const SearchWithFilter = () => {
 	);
 };
 
-export default SearchWithFilter;
+export default Search;

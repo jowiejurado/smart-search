@@ -5,5 +5,54 @@
 		"text": "Loving the energy from cold plunges this week!",
 		"tags": ["cold therapy", "morning ritual"],
 		"timestamp": "2025-04-02T08:30:00"
+	},
+	{
+		"id": "s2",
+		"user": "mindful_medic",
+		"text": "Meditation isn't about becoming a different person. It's about training your mind!",
+		"tags": ["meditation", "mindfulness"],
+		"timestamp": "2025-04-03T11:45:00"
+	},
+	{
+		"id": "s3",
+		"user": "herbal_heart",
+		"text": "Made a calming chamomile & lavender tea blend today 🌸☕",
+		"tags": ["herbalism", "selfcare"],
+		"timestamp": "2025-04-04T16:20:00"
+	},
+	{
+		"id": "s4",
+		"user": "nature_moves",
+		"text": "Trail running clears my mind like nothing else. #naturetherapy",
+		"tags": ["trail running", "mental health"],
+		"timestamp": "2025-04-05T07:10:00"
+	},
+	{
+		"id": "s5",
+		"user": "gut_guru",
+		"text": "Fermented foods are 🔑 for gut health. What's your go-to probiotic food?",
+		"tags": ["gut health", "nutrition"],
+		"timestamp": "2025-04-06T13:05:00"
+	},
+	{
+		"id": "s6",
+		"user": "detox_diva",
+		"text": "Starting a 3-day juice cleanse tomorrow! Wish me luck 🍏🥕🍋",
+		"tags": ["detox", "wellness journey"],
+		"timestamp": "2025-04-06T18:50:00"
+	},
+	{
+		"id": "s7",
+		"user": "zen_samurai",
+		"text": "Breathwork is the real game changer for anxiety. Try box breathing today!",
+		"tags": ["breathwork", "anxiety relief"],
+		"timestamp": "2025-04-07T09:00:00"
+	},
+	{
+		"id": "s8",
+		"user": "earthbound",
+		"text": "Gardening barefoot = instant grounding 🌿👣 #earthing",
+		"tags": ["grounding", "nature healing"],
+		"timestamp": "2025-04-08T17:30:00"
 	}
 ]

@@ -7,5 +7,68 @@
 		"target_type": "practitioner",
 		"target_id": "p1",
 		"date": "2025-02-22"
+	},
+	{
+		"id": "r2",
+		"rating": 4,
+		"text": "Sofia's herbal blend helped ease my PMS symptoms. Highly recommend!",
+		"reviewer": "Lily R.",
+		"target_type": "practitioner",
+		"target_id": "p2",
+		"date": "2025-03-10"
+	},
+	{
+		"id": "r3",
+		"rating": 5,
+		"text": "Kenji's acupuncture sessions dramatically reduced my back pain.",
+		"reviewer": "Marcus K.",
+		"target_type": "practitioner",
+		"target_id": "p3",
+		"date": "2025-03-18"
+	},
+	{
+		"id": "r4",
+		"rating": 3,
+		"text": "Detox program was good but I wish there was more follow-up support.",
+		"reviewer": "Nina D.",
+		"target_type": "practitioner",
+		"target_id": "p4",
+		"date": "2025-04-01"
+	},
+	{
+		"id": "r5",
+		"rating": 5,
+		"text": "The mindfulness techniques Emma shared completely changed how I handle stress!",
+		"reviewer": "Sam O.",
+		"target_type": "practitioner",
+		"target_id": "p5",
+		"date": "2025-04-05"
+	},
+	{
+		"id": "r6",
+		"rating": 4,
+		"text": "Carlos gave me the tools I needed to sustainably lose 15 pounds.",
+		"reviewer": "Andrés M.",
+		"target_type": "practitioner",
+		"target_id": "p7",
+		"date": "2025-04-07"
+	},
+	{
+		"id": "r7",
+		"rating": 5,
+		"text": "The traditional healing session with Zanele was profound and deeply moving.",
+		"reviewer": "Thandi S.",
+		"target_type": "practitioner",
+		"target_id": "p6",
+		"date": "2025-04-09"
+	},
+	{
+		"id": "r8",
+		"rating": 5,
+		"text": "Emma's functional medicine approach gave me my life back from Hashimoto's!",
+		"reviewer": "Julia F.",
+		"target_type": "practitioner",
+		"target_id": "p8",
+		"date": "2025-04-12"
 	}
 ]

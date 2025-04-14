@@ -12,7 +12,8 @@
   "dependencies": {
     "@algolia/autocomplete-core": "^1.18.1",
     "@algolia/autocomplete-js": "^1.18.1",
-    "@heroicons/react": "^2.2.0",
+    "@mdi/js": "^7.4.47",
+    "@mdi/react": "^1.6.1",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.7",
     "next": "15.2.4",

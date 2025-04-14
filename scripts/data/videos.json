@@ -7,5 +7,41 @@
 		"duration": "08:15",
 		"uploaded_by": "Dr. Ayana Wells",
 		"date": "2025-02-10"
+	},
+	{
+		"id": "v2",
+		"title": "Top 5 Herbs for Immune Support",
+		"summary": "Learn about the best herbs to strengthen your immune system naturally.",
+		"tags": ["herbs", "immune support"],
+		"duration": "06:42",
+		"uploaded_by": "Mr. Chris T.",
+		"date": "2025-03-05"
+	},
+	{
+		"id": "v3",
+		"title": "Breathwork for Stress Relief",
+		"summary": "Simple breathwork techniques to manage daily stress and anxiety.",
+		"tags": ["breathwork", "stress management"],
+		"duration": "12:30",
+		"uploaded_by": "Mr. Joel M.",
+		"date": "2025-04-01"
+	},
+	{
+		"id": "v4",
+		"title": "Gut Health 101: What You Need to Know",
+		"summary": "Basics of maintaining a healthy gut and improving digestion.",
+		"tags": ["gut health", "nutrition"],
+		"duration": "09:10",
+		"uploaded_by": "Dr. Mary S.",
+		"date": "2025-01-22"
+	},
+	{
+		"id": "v5",
+		"title": "Detox Smoothie Recipes",
+		"summary": "Easy and delicious smoothie recipes to help detox naturally.",
+		"tags": ["detox", "recipes"],
+		"duration": "05:55",
+		"uploaded_by": "Dr. Mary S.",
+		"date": "2025-03-20"
 	}
 ]

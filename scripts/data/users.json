@@ -1,10 +1,66 @@
 [
 	{
 		"id": "u1",
-		"name": "Dr. Ayana Wells",
+		"name": "Dra. Ayana Wells",
 		"bio": "Holistic health advocate and educator.",
 		"roles": ["Practitioner", "Contributor"],
 		"contribution_count": 45,
 		"location": "Austin, TX"
+	},
+	{
+		"id": "u2",
+		"name": "Ms. Jenna B.",
+		"bio": "Nature lover and wellness explorer.",
+		"roles": ["Reviewer"],
+		"contribution_count": 12,
+		"location": "Boulder, CO"
+	},
+	{
+		"id": "u3",
+		"name": "Mr. John S.",
+		"bio": "Sharing my natural wellness journey 🌱✨",
+		"roles": ["Social Poster"],
+		"contribution_count": 88,
+		"location": "Portland, OR"
+	},
+	{
+		"id": "u4",
+		"name": "Mrs. Jane D.",
+		"bio": "Mama on a mission to heal naturally.",
+		"roles": ["Forum Member"],
+		"contribution_count": 34,
+		"location": "Santa Fe, NM"
+	},
+	{
+		"id": "u5",
+		"name": "Dr. Mary S.",
+		"bio": "Certified nutritionist specializing in gut health.",
+		"roles": ["Practitioner", "Social Poster"],
+		"contribution_count": 72,
+		"location": "San Diego, CA"
+	},
+	{
+		"id": "u6",
+		"name": "Mr. Chris T.",
+		"bio": "Just a guy who loves herbs and hiking.",
+		"roles": ["Commenter"],
+		"contribution_count": 9,
+		"location": "Burlington, VT"
+	},
+	{
+		"id": "u7",
+		"name": "Mr. Joel M.",
+		"bio": "Exploring all things detox and wellness ✨",
+		"roles": ["Social Poster", "Forum Member"],
+		"contribution_count": 57,
+		"location": "Sedona, AZ"
+	},
+	{
+		"id": "u8",
+		"name": "Mr. Jerome T.",
+		"bio": "Mindfulness practitioner and coach.",
+		"roles": ["Contributor", "Social Poster"],
+		"contribution_count": 65,
+		"location": "Seattle, WA"
 	}
 ]
