@@ -123,6 +123,13 @@ const SearchWithFilter = () => {
 								return acc;
 							}, {});
 
+						const openAiSummary = await fetch("/api/summarize-results", {
+							method: "POST",
+							headers: { "Content-Type": "application/json" },
+							body: JSON.stringify({ results: groupedResults }),
+						})
+						.then((res) => res.json());
+
 						return Object.keys(groupedResults).map(
 							(collectionName: string) => ({
 								sourceId: collectionName,
