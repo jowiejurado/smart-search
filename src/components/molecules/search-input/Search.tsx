@@ -218,7 +218,7 @@ const Search = ({ summarizeResult, isSummarizing }: SearchProps) => {
 				className="max-w-2xl flex flex-col mx-auto relative"
 			>
 				<div className="relative w-full">
-					<span className="absolute bg-gray-900 dark:bg-white rounded-full p-2 top-3 left-1">
+					<span className="absolute bg-gray-900 dark:bg-white rounded-full p-2.75 top-3 left-1">
 						<Icon
 							path={mdiMagnify}
 							size={0.9}
@@ -241,8 +241,8 @@ const Search = ({ summarizeResult, isSummarizing }: SearchProps) => {
 								autocomplete?.refresh();
 							}
 						}}
-						placeholder="Type keywords"
-						className="block mt-2 py-3 pl-12 pr-24 w-full placeholder-gray-900/50 rounded-full border border-gray-900 bg-transparent text-gray-900 outline-0 dark:placeholder-white/50 dark:border-gray-600 dark:text-white"
+						placeholder="Enter keywords to search..."
+						className="block mt-2 py-3 pl-14 pr-26 w-full placeholder-gray-900/50 rounded-full border border-gray-900 bg-transparent text-gray-900 outline-0 dark:placeholder-white/50 dark:border-gray-600 dark:text-white"
 					/>
 					<button
 						type="submit"

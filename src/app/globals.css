@@ -1,3 +1,7 @@
 @import "tailwindcss";
 
 @variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+body {
+	font-family: "poppins", "sans-serif";
+}

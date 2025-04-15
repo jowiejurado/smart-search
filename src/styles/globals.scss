@@ -1,9 +1,9 @@
-@use 'typography';
+@use "typography";
 
 :root {
 	--container-width: 1400px;
-  --container-width-small: 600px;
-  --container-width-medium: 760px;
+	--container-width-small: 600px;
+	--container-width-medium: 760px;
 
 	// Site colors
 	--white: #ffffff;
@@ -11,20 +11,20 @@
 	--gray: #838383;
 	--primary: #f7f2ee;
 
-	--font-primary: 'lato';
-	--font-heading: 'lato';
+	--font-primary: "poppins";
+	--font-heading: "poppins";
 }
 
 * {
 	box-sizing: border-box;
 	letter-spacing: 0.64px;
-	font-family: var(--font-primary), 'Arial', 'Serif';
+	font-family: var(--font-primary), "Arial", "Serif";
 }
 
 html {
 	line-height: normal;
 	font-size: 16px;
-	font-family: var(--font-primary), 'Arial', 'Serif';
+	font-family: var(--font-primary), "Arial", "Serif";
 }
 
 h1,
@@ -33,7 +33,7 @@ h3,
 h4,
 h5,
 h6 {
-	font-family: var(--font-primary), 'Arial', 'Serif';
+	font-family: var(--font-primary), "Arial", "Serif";
 }
 
 a {
@@ -49,5 +49,5 @@ p,
 span,
 button,
 label {
-  font-family: var(--font-primary), 'Arial', 'Serif';
+	font-family: var(--font-primary), "Arial", "Serif";
 }
