@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, use } from "react";
 import Typesense from "typesense";
 import { createAutocomplete } from "@algolia/autocomplete-core";
 import Icon from "@mdi/react";
@@ -10,9 +10,13 @@ import style from "./Search.module.scss";
 type SearchProps = {
 	summarizeResult: (result: string) => void;
 	isSummarizing: (value: boolean) => void;
+	selectedContentTypes: string[];
+	tags: string;
+	location: string;
+	specialty: string;
 };
 
-const Search = ({ summarizeResult, isSummarizing }: SearchProps) => {
+const Search = ({ summarizeResult, isSummarizing, selectedContentTypes, tags, location, specialty }: SearchProps) => {
 	const [autocompleteState, setAutocompleteState] = useState<any>({
 		collections: [],
 	});
@@ -47,75 +51,77 @@ const Search = ({ summarizeResult, isSummarizing }: SearchProps) => {
 						setIsSearching(true);
 
 						try {
-							const multiSearchResults =
-								await typesenseClient.multiSearch.perform({
-									searches: [
-										{
-											collection: "articles",
-											q: query,
-											query_by: "title,tags,author,summary",
-											highlight_full_fields: "title,tags,author,summary",
-											per_page: 5,
-										},
-										{
-											collection: "locations",
-											q: query,
-											query_by: "city,state,country",
-											highlight_full_fields: "city,state,country",
-											per_page: 5,
-										},
-										{
-											collection: "comments",
-											q: query,
-											query_by: "text,author,type",
-											highlight_full_fields: "text,author,type",
-											per_page: 5,
-										},
-										{
-											collection: "users",
-											q: query,
-											query_by: "name,bio,roles,location",
-											highlight_full_fields: "name,bio,roles,location",
-											per_page: 5,
-										},
-										{
-											collection: "practitioners",
-											q: query,
-											query_by: "name,specialties,location,bio,certifications",
-											highlight_full_fields:
-												"name,specialties,location,bio,certifications",
-											per_page: 5,
-										},
-										{
-											collection: "reviews",
-											q: query,
-											query_by: "text,reviewer",
-											highlight_full_fields: "text,reviewer",
-											per_page: 5,
-										},
-										{
-											collection: "forum_posts",
-											q: query,
-											query_by: "author,category,title,body",
-											highlight_full_fields: "author,category,title,body",
-											per_page: 5,
-										},
-										{
-											collection: "social_posts",
-											q: query,
-											query_by: "user,text,tags",
-											highlight_full_fields: "user,text,tags",
-											per_page: 5,
-										},
-										{
-											collection: "videos",
-											q: query,
-											query_by: "summary,uploaded_by,title,tags",
-											highlight_full_fields: "summary,uploaded_by,title,tags",
-											per_page: 5,
-										},
-									],
+							const baseCollections = [
+								{
+									name: "articles",
+									query_by: "title,tags,author,summary",
+								},
+								{
+									name: "locations",
+									query_by: "city,state,country",
+								},
+								{
+									name: "comments",
+									query_by: "text,author,type",
+								},
+								{
+									name: "users",
+									query_by: "name,bio,roles,location",
+								},
+								{
+									name: "practitioners",
+									query_by: "name,specialties,location,bio,certifications",
+								},
+								{
+									name: "reviews",
+									query_by: "text,reviewer",
+								},
+								{
+									name: "forum_posts",
+									query_by: "author,category,title,body",
+								},
+								{
+									name: "social_posts",
+									query_by: "user,text,tags",
+								},
+								{
+									name: "videos",
+									query_by: "summary,uploaded_by,title,tags",
+								},
+							];
+
+							const searches = baseCollections
+								.filter((col) => selectedContentTypes.includes(col.name))
+								.map((col) => {
+									let filter_by = [];
+
+									if (tags) {
+										if (["articles", "social_posts", "videos"].includes(col.name)) {
+											filter_by.push(`tags:=[${tags}]`);
+										}
+									}
+
+									if (location) {
+										if (["locations", "users", "practitioners"].includes(col.name)) {
+											filter_by.push(`location:=${JSON.stringify(location)}`);
+										}
+									}
+
+									if (specialty && col.name === "practitioners") {
+										filter_by.push(`specialties:=[${specialty}]`);
+									}
+
+									return {
+										collection: col?.name,
+										q: query,
+										query_by: col?.query_by,
+										highlight_full_fields: col?.query_by,
+										filter_by: filter_by?.length ? filter_by?.join(" && ") : undefined,
+										per_page: 5,
+									};
 								});
+
+							const multiSearchResults = await typesenseClient.multiSearch.perform({ searches });
 
 							const groupedResults = multiSearchResults.results
 								.flatMap((result: any) =>
@@ -126,25 +132,22 @@ const Search = ({ summarizeResult, isSummarizing }: SearchProps) => {
 									}))
 								)
 								.reduce((acc: any, current: any) => {
-									if (!acc[current.collection]) {
-										acc[current.collection] = [];
-									}
-									acc[current.collection].push(current);
+									if (!acc[current?.collection]) acc[current?.collection] = [];
+									acc[current?.collection].push(current);
 									return acc;
 								}, {});
 
 							fetchSummary(groupedResults);
 
-							return Object.keys(groupedResults).map(
-								(collectionName: string) => ({
-									sourceId: collectionName,
-									items: groupedResults[collectionName],
-								})
-							);
+							return Object.keys(groupedResults).map((collectionName: string) => ({
+								sourceId: collectionName,
+								items: groupedResults[collectionName],
+							}));
 						} finally {
 							setIsSearching(false);
 						}
 					},
+
 					getItemInputValue({ item }: any) {
 						return null;
 					},
@@ -200,6 +203,7 @@ const Search = ({ summarizeResult, isSummarizing }: SearchProps) => {
 
 		autocomplete?.refresh();
 	}, [debouncedQuery]);
+
 
 	return (
 		<div className="min-w-full relative">
@@ -266,7 +270,7 @@ const Search = ({ summarizeResult, isSummarizing }: SearchProps) => {
 											{collection.items.map((item: any, itemIndex: number) => (
 												<div key={itemIndex} className="mb-4">
 													<h6 className="text-sm font-bold px-4 py-2 capitalize relative inline-block">
-														{item?.sourceId.replace("_", " ")} Results
+														{item?.sourceId?.replace("_", " ")} Results
 														<span className="absolute left-full top-1/2 w-xl h-px bg-white dark:bg-gray-900 transform -translate-y-1/4"></span>
 													</h6>
 													<ul>
@@ -432,7 +436,7 @@ const Search = ({ summarizeResult, isSummarizing }: SearchProps) => {
 																							) => (
 																								<div
 																									key={specialtyIndex}
-																									className={`${style.highlighted} bg-gray-700 dark:bg-gray-300 text-white dark:text-gray-900 rounded-full px-2 py-1`}
+																									className={`${style.highlighted} bg-gray-700 dark:bg-gray-500 text-white dark:text-white rounded-full px-2 py-1`}
 																									dangerouslySetInnerHTML={{
 																										__html: specialty,
 																									}}
@@ -452,7 +456,7 @@ const Search = ({ summarizeResult, isSummarizing }: SearchProps) => {
 																							) => (
 																								<div
 																									key={certificationIndex}
-																									className={`${style.highlighted} bg-gray-700 dark:bg-gray-300 text-white dark:text-gray-900 rounded-full px-2 py-1`}
+																									className={`${style.highlighted} bg-gray-700 dark:bg-gray-500 text-white dark:text-white rounded-full px-2 py-1`}
 																									dangerouslySetInnerHTML={{
 																										__html: certification,
 																									}}

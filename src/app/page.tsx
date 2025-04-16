@@ -13,6 +13,22 @@ const Home = () => {
 	const [summary, setSummary] = useState<string>("");
 	const [isSummarize, setIsSummarizing] = useState<boolean>(false);
 	const [isOpenFilterModal, setOpenFilterModal] = useState<boolean>(false);
+	const [selectedCollection, setSelectedCollection] = useState<string[]>(
+			[
+				"practitioners",
+				"articles",
+				"comments",
+				"forum_posts",
+				"locations",
+				"reviews",
+				"social_posts",
+				"users",
+				"videos",
+			]
+		);
+		const [tags, setTags] = useState<string>("");
+		const [location, setLocation] = useState<string>("");
+		const [specialty, setSpecialty] = useState<string>("");
 
 	const summarizeResult = (result: string) => {
 		setSummary(result);
@@ -30,6 +46,14 @@ const Home = () => {
 		setOpenFilterModal(isClose);
 	};
 
+	const handleFilters = (selectedContentTypes: string[], tags: string, location: string, specialty: string) => {
+		setSelectedCollection(selectedContentTypes);
+		setTags(tags);
+		setLocation(location);
+		setSpecialty(specialty);
+		setOpenFilterModal(false);
+	}
+
 	return (
 		<>
 			<ThemeProvider>
@@ -46,11 +70,22 @@ const Home = () => {
 							<Search
 								summarizeResult={summarizeResult}
 								isSummarizing={isSummarizing}
+								selectedContentTypes={selectedCollection}
+								tags={tags}
+								location={location}
+								specialty={specialty}
 							/>
 						</div>
 					</div>
 					{isOpenFilterModal && (
-						<FiltersModal closeFilterModal={closeFilterModal} />
+						<FiltersModal
+							closeFilterModal={closeFilterModal}
+							applyFilters={handleFilters}
+							selectedCollections={selectedCollection}
+							tagsValue={tags}
+							locationValue={location}
+							specialtyValue={specialty}
+						/>
 					)}
 				</main>
 			</ThemeProvider>
