@@ -10,6 +10,11 @@
 - <b>Responsive Design:</b> Styled with TailwindCSS and Sass for a sleek, mobile-friendly interface.
 - <b>Easy Deployment:</b> Configured for seamless deployment on platforms like Netlify.
 
+#### ⚙️ Tools Required
+- Node.js (v14 or higher)
+- Code Editor (e.g., Visual Studio Code)
+- Modern Web Browser (e.g., Google Chrome)
+
 #### 🛠️ Tech Stack
 - Frontend: Next.js, TypeScript, TailwindCSS, Sass
 - Search Engine: Typesense
@@ -31,7 +36,8 @@ npm install
 ```
 
 3. Configure Environment Variables
-Create a .env.local file in the root directory and add the following variables:
+
+	Create a .env.local file in the root directory and add the following variables:
 ```env
 NEXT_PUBLIC_TYPESENSE_SEARCH_ONLY_API_KEY=xxx
 NEXT_PUBLIC_TYPESENSE_HOST=xxx.typesense.net
@@ -43,7 +49,7 @@ OPENAI_API_KEY=sk-xxx
 Replace the placeholders with your actual Typesense credentials.
 
 4. Import Data into Typesense (Optional if data still doesn't exist)
-Ensure your Typesense server is running, then execute:
+	Ensure your Typesense server is running, then execute:
 ```shell
 npm run import:typesense
 ```
