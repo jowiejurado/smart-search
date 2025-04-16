@@ -158,7 +158,6 @@ const Search = ({ summarizeResult, isSummarizing }: SearchProps) => {
 	};
 
 	const fetchSummary = async (groupResults: any) => {
-		isSummarizing(true);
 		const openAiSummary = await fetch("/api/summarize-results", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
@@ -184,8 +183,9 @@ const Search = ({ summarizeResult, isSummarizing }: SearchProps) => {
 
 	useEffect(() => {
 		const timeoutId = setTimeout(() => {
+			isSummarizing(true);
 			setDebouncedQuery(query);
-		}, 300);
+		}, 1000);
 
 		return () => clearTimeout(timeoutId);
 	}, [query]);
